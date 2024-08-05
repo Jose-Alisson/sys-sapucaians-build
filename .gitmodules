@@ -1,0 +1,6 @@
+[submodule "pedidos"]
+	path = pedidos
+	url = https://github.com/Jose-Alisson/sys-sapucaians-pedidos.git
+[submodule "principal"]
+	path = principal
+	url = https://github.com/Jose-Alisson/sys-sapucaians.git
