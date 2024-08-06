@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - my-network
+
+  backpedidos:
+    build:
+      context: ./pedidos
+      dockerfile: Dockerfile
+    container_name: sys-sapucaians-pedidos
+    environment:
+      - DATABASE_URL=jdbc:mysql://mysqldb/db
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=admin
+      - API_MAIN=http://backmain:4000
+    networks:
+      - my-network
+    depends_on:
+      - mysqldb
+    ports:
+      - '8000:8080'
+
+  backmain:
+    build:
+      context: ./principal
+      dockerfile: Dockerfile
+    container_name: sys-sapucaians-main
+    environment:
+      - PEDIDOS_URL=http://backpedidos:8080
+    networks:
+      - my-network
+    volumes:
+      - main-data:/main/data
+    depends_on:
+      - backpedidos
+    ports:
+      - '4000:4000'
+  # adminmain:
+  #   image: alisson9986/sys-sapucaians-admin:1.5
+  #   container_name: adminManager
+  #   ports:
+  #     - '5000:5050'
+  #   depends_on:
+  #     - backmain
+  #   environment:
+  #     - API_MAIN=http://backmain:4000
+  #     - API_PEDIDOS=http://backpedidos:8080
+  #   networks:
+  #     - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  db-data:
+  main-data:
