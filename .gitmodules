@@ -4,3 +4,9 @@
 [submodule "principal"]
 	path = principal
 	url = https://github.com/Jose-Alisson/sys-sapucaians.git
+[submodule "admin"]
+	path = admin
+	url = https://github.com/Jose-Alisson/sys-sapucaians-admin.git
+[submodule "client"]
+	path = client
+	url = https://github.com/Jose-Alisson/sys-sapucaians-client.git

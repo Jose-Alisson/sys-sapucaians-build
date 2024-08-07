@@ -12,50 +12,62 @@ services:
     networks:
       - my-network
 
-  backpedidos:
+  pedidos:
     build:
-      context: ./pedidos
+      context: pedidos/
       dockerfile: Dockerfile
     container_name: sys-sapucaians-pedidos
     environment:
       - DATABASE_URL=jdbc:mysql://mysqldb/db
       - DATABASE_USERNAME=root
       - DATABASE_PASSWORD=admin
-      - API_MAIN=http://backmain:4000
+      - API_MAIN=http://main:4040
     networks:
       - my-network
     depends_on:
       - mysqldb
-    ports:
-      - '8000:8080'
+    # ports:
+    #   - '8000:8080'
 
-  backmain:
+  main:
     build:
-      context: ./principal
+      context: principal/
       dockerfile: Dockerfile
     container_name: sys-sapucaians-main
     environment:
-      - PEDIDOS_URL=http://backpedidos:8080
+      - PEDIDOS_URL=http://pedidos:8080
     networks:
       - my-network
     volumes:
       - main-data:/main/data
     depends_on:
-      - backpedidos
+      - pedidos
+    # ports:
+    #   - '4000:4000'
+
+  admin:
+    build:
+      context: admin/
+      dockerfile: Dockerfile
     ports:
-      - '4000:4000'
-  # adminmain:
-  #   image: alisson9986/sys-sapucaians-admin:1.5
-  #   container_name: adminManager
-  #   ports:
-  #     - '5000:5050'
-  #   depends_on:
-  #     - backmain
-  #   environment:
-  #     - API_MAIN=http://backmain:4000
-  #     - API_PEDIDOS=http://backpedidos:8080
-  #   networks:
-  #     - my-network
+      - '5000:80'
+    depends_on:
+      - main
+      - pedidos
+    networks:
+      - my-network
+  
+  client:
+    build:
+      context: client/
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    depends_on:
+      - main
+      - pedidos
+    networks:
+      - my-network
 
 networks:
   my-network:
