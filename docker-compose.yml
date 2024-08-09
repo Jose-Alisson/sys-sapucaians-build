@@ -13,9 +13,10 @@ services:
       - my-network
 
   pedidos:
-    build:
-      context: pedidos/
-      dockerfile: Dockerfile
+    # build:
+    #   context: pedidos/
+    #   dockerfile: Dockerfile
+    image: alisson9986/syssapucaiansmain-pedidos:latest
     container_name: sys-sapucaians-pedidos
     environment:
       - DATABASE_URL=jdbc:mysql://mysqldb/db
@@ -30,9 +31,10 @@ services:
     #   - '8000:8080'
 
   main:
-    build:
-      context: principal/
-      dockerfile: Dockerfile
+    # build:
+    #   context: principal/
+    #   dockerfile: Dockerfile
+    image: alisson9986/syssapucaiansmain-main:latest
     container_name: sys-sapucaians-main
     environment:
       - PEDIDOS_URL=http://pedidos:8080
@@ -59,9 +61,10 @@ services:
   #     - my-network
   
   client:
-    build:
-      context: client/
-      dockerfile: Dockerfile
+    # build:
+    #   context: client/
+    #   dockerfile: Dockerfile
+    image: alisson9986/syssapucaiansmain-client:latest
     ports:
       - '3000:80'
     depends_on:
