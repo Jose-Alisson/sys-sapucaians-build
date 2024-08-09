@@ -40,23 +40,23 @@ services:
       - my-network
     volumes:
       - main-data:/main/data
-      - ./pass/main:/main/hidratation
+      - ./pass/main:/main/public
     depends_on:
       - pedidos
     # ports:
     #   - '4000:4000'
 
-  admin:
-    build:
-      context: admin/
-      dockerfile: Dockerfile
-    ports:
-      - '5000:80'
-    depends_on:
-      - main
-      - pedidos
-    networks:
-      - my-network
+  # admin:
+  #   build:
+  #     context: admin/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '5000:80'
+  #   depends_on:
+  #     - main
+  #     - pedidos
+  #   networks:
+  #     - my-network
   
   client:
     build:
@@ -67,6 +67,16 @@ services:
     depends_on:
       - main
       - pedidos
+    networks:
+      - my-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"  # Expondo a porta 80 do container para a porta 80 do host
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Mapeando o arquivo de configuração
     networks:
       - my-network
 
